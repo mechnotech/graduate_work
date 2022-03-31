@@ -1,0 +1,28 @@
+version: '3.5'
+services:
+  cdn_api:
+    build: cdn_backend/
+    container_name: cdn_api
+    volumes:
+      - cdn_nginx:/code/src/cdn/
+    env_file:
+      - cdn_backend/.env.example
+
+  cdn_nginx:
+      image: nginx:1.19.2
+      container_name: cdn_nginx
+      volumes:
+        - ./cdn_nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        - ./cdn_nginx/site.conf:/etc/nginx/conf.d/site.conf:ro
+        - cdn_nginx:/cdn/
+      ports:
+        - "80:80"
+      depends_on:
+        - cdn_api
+      env_file:
+        - cdn_backend/.env.example
+
+
+volumes:
+    cdn_nginx:
+      name: tests_cdn_nginx
