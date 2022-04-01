@@ -13,7 +13,7 @@ services:
       container_name: cdn_nginx
       volumes:
         - ./cdn_nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-        - ./cdn_nginx/site.conf:/etc/nginx/conf.d/site.conf:ro
+        - ./cdn_nginx/site.conf.template:/etc/nginx/templates/site.conf.template
         - cdn_nginx:/cdn/
       ports:
         - "80:80"
