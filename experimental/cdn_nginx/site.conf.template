@@ -11,8 +11,12 @@ server {
     }
 
     location /cdn/ {
+    limit_conn ip_addr 1;
+    limit_rate ${LIMIT_RATE};
     secure_link $arg_md5,$arg_expires;
     secure_link_md5 "$secure_link_expires $uri $remote_addr ${SECRET_KEY}";
+
+
 
     if ($secure_link = "") {
         return 403;
@@ -21,8 +25,6 @@ server {
     if ($secure_link = "0") {
         return 410;
     }
-
-    alias /cdn/;
 }
 
     location /tst/ {
