@@ -15,13 +15,13 @@ def show_error(text: Optional[Any], http_code: int):
     return abort(make_response(jsonify({'msg': text}), http_code))
 
 
-def get_link_code(expiration: int, file_name: str, bitrate: int, real_ip: str):
-    link = f'{expiration} /cdn/{bitrate}p/{file_name} {real_ip} {SECRET_KEY}'.encode('utf-8')
+def get_link_code(expiration: int, file_name: str, bitrate: str, real_ip: str):
+    link = f'{expiration} /cdn/{bitrate}/{file_name} {real_ip} {SECRET_KEY}'.encode('utf-8')
     hash_md5 = hashlib.md5(link).digest()
     base64_bytes = base64.urlsafe_b64encode(hash_md5)
     base64_message = base64_bytes.decode('utf-8')
     message = base64_message.replace('=', '')
-    return f'http://localhost/cdn/{bitrate}p/{file_name}?md5={message}&expires={expiration}'
+    return f'http://localhost/cdn/{bitrate}/{file_name}?md5={message}&expires={expiration}'
 
 
 def get_redirecting():
@@ -34,9 +34,9 @@ def get_redirecting():
     expiration = int((datetime.datetime.now() + datetime.timedelta(hours=LINK_EXPIRES_HOURS)).timestamp())
     result = {}
     for file_name in ls:
-        for rate in [1080, 720, 480, 360, 240, 144]:
+        for rate in ['1080p', '720p', '480p', '360p', '240p', '144p', 'master']:
             link = get_link_code(expiration, file_name, rate, real_ip)
             result[f'{rate}-' + file_name] = link
     result['info'] = f'ip={ip_addr}, real ip={real_ip}, forwarded ip={forwarded}'
-    result['fake-file'] = get_link_code(expiration, 'fake.mp4', 1080, real_ip)
+    result['fake-file'] = get_link_code(expiration, 'fake.mp4', '1080p', real_ip)
     return result
