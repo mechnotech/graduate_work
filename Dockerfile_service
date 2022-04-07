@@ -1,0 +1,19 @@
+
+FROM python:3.9.12-alpine
+
+EXPOSE 8080/tcp
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+WORKDIR /app
+COPY requirements.txt /app/
+RUN apk update --no-cache \
+&& apk add build-base --no-cache --virtual .build-deps \
+&& pip install setuptools --upgrade \
+&& pip install --no-cache-dir -r requirements.txt \
+&& apk del .build-deps
+
+COPY src/service/  /app/
+
+CMD ["python3", "main.py"]
