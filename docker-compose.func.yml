@@ -10,6 +10,49 @@ services:
     ports:
       - "8080:8080"
 
+  nginx_cdn_main:
+    image: nginx:1.19.2
+    container_name: nginx_cdn_main
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/site.conf.template:/etc/nginx/templates/site.conf.template
+      - cdn_main:/cdn/
+    ports:
+      - "80:80"
+    depends_on:
+      - cdn_service
+    env_file:
+      - nginx/.env.example
+
+  nginx_cdn_1:
+    image: nginx:1.19.2
+    container_name: nginx_cdn_1
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/site.conf.template:/etc/nginx/templates/site.conf.template
+      - cdn_1:/cdn/
+    ports:
+      - "81:80"
+    depends_on:
+      - cdn_service
+    env_file:
+      - nginx/.env.example
+
+  nginx_cdn_2:
+    image: nginx:1.19.2
+    container_name: nginx_cdn_2
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/site.conf.template:/etc/nginx/templates/site.conf.template
+      - cdn_2:/cdn/
+    ports:
+      - "82:80"
+    depends_on:
+      - cdn_service
+    env_file:
+      - nginx/.env.example
+
+
 volumes:
   cdn_main:
     external: true
