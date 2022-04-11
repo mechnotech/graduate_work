@@ -14,6 +14,7 @@ RUN apk update --no-cache \
 && pip install --no-cache-dir -r requirements.txt \
 && apk del .build-deps
 
-COPY src/service/  /app/
+COPY src/service/  /app/service/
+COPY src/main.py /app/main.py
 
 CMD ["python3", "main.py"]

@@ -15,6 +15,7 @@ RUN apk update --no-cache \
 && pip install --no-cache-dir -r requirements.dev.txt \
 && apk del .build-deps
 
+COPY src/service/ /app/service/
 COPY src/functional/ /app/functional/
 
 ENTRYPOINT ["pytest", "-s", "-v", "--asyncio-mode=strict", "functional/"]
