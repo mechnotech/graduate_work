@@ -1,0 +1,33 @@
+openapi: 3.0.2
+info:
+  title: 'CDN API'
+  version: ''
+  description: |
+    запросы к API начинаются с `/api/v1/`
+    # Описание
+    
+    
+    
+    
+    
+servers:
+  - url: /api/v1/
+
+tags:
+  - name: LINKS
+    description: Ссылки
+
+
+paths:
+
+  /links/get_link_list:
+    get:
+      tags:
+        - LINKS
+      description: Получение списка ссылок на файлы в volume CDN.
+      responses:
+        200:
+          description: ''
+        404:
+          description: Нет файлов
+
