@@ -18,5 +18,8 @@ class BaseConfig(BaseSettings):
     cdn_1: str = Field(default='data/cdn_1', env='CDN_STOR_1')
     cdn_2: str = Field(default='data/cdn_2', env='CDN_STOR_2')
 
+    cdn_var_expiration_def: int = Field(default=60*180, env='CDN_V_EXPIRATION_DEF')
+    cdn_var_expiration_mul: float = Field(default=1.2, env='CDN_V_EXPERATION_MUL')
+
 
 config = BaseConfig()

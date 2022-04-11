@@ -60,7 +60,7 @@ stop:
 test:
 	make volume_up
 	docker build -f $(UNITTEST_DOCKERFILE) -t $(UNITTEST_IMAGE) .
-	docker run --rm --net=host \
+	-docker run --rm --net=host \
 	--mount source=cdn_main,destination=/app/service/data/cdn_main \
 	--mount source=cdn_1,destination=/app/service/data/cdn_1 \
 	--mount source=cdn_2,destination=/app/service/data/cdn_2 \
@@ -74,6 +74,24 @@ compose_debug:
 	docker-compose -f $(FUNC_COMPOSE) up
 	make volume_down
 
+func_stage:
+	make volume_up
+	make build
+	-docker-compose -f $(FUNC_COMPOSE) rm -fs
+	docker-compose -f $(FUNC_COMPOSE) up
+
+	-docker-compose -f $(FUNC_COMPOSE) rm -fs
+	make volume_down
+
+func_test:
+	docker build -f $(FUNC_DOCKERFILE) -t $(FUNC_IMAGE) .
+	-docker run --rm --net=host \
+	--mount source=cdn_main,destination=/app/data/cdn_main \
+	--mount source=cdn_1,destination=/app/data/cdn_1 \
+	--mount source=cdn_2,destination=/app/data/cdn_2 \
+	--name $(FUNC_CONTAINER) \
+	$(FUNC_IMAGE)
+
 
 func:
 	make volume_up
@@ -81,13 +99,7 @@ func:
 	-docker-compose -f $(FUNC_COMPOSE) rm -fs
 	docker-compose -f $(FUNC_COMPOSE) up -d
 	sleep 3
-	docker build -f $(FUNC_DOCKERFILE) -t $(FUNC_IMAGE) .
-	docker run --rm --net=host \
-	--mount source=cdn_main,destination=/app/data/cdn_main \
-	--mount source=cdn_1,destination=/app/data/cdn_1 \
-	--mount source=cdn_2,destination=/app/data/cdn_2 \
-	--name $(FUNC_CONTAINER) \
-	$(FUNC_IMAGE)
+	make func_test
 
 	docker-compose -f $(FUNC_COMPOSE) rm -fs
 	make volume_down
