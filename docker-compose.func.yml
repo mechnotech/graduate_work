@@ -18,7 +18,7 @@ services:
       - ./nginx/site.conf.template:/etc/nginx/templates/site.conf.template
       - cdn_main:/cdn/
     ports:
-      - "80:80"
+      - "8081:80"
     depends_on:
       - cdn_service
     env_file:
@@ -32,7 +32,7 @@ services:
       - ./nginx/site.conf.template:/etc/nginx/templates/site.conf.template
       - cdn_1:/cdn/
     ports:
-      - "81:80"
+      - "8082:80"
     depends_on:
       - cdn_service
     env_file:
@@ -46,7 +46,7 @@ services:
       - ./nginx/site.conf.template:/etc/nginx/templates/site.conf.template
       - cdn_2:/cdn/
     ports:
-      - "82:80"
+      - "80831:80"
     depends_on:
       - cdn_service
     env_file:
