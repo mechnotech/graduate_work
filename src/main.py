@@ -1,39 +1,15 @@
-
 """
-swager - http://localhost:8080/api/openapi
+Service start point
 """
 
-import logging
 import uvicorn
 
-
-from fastapi import FastAPI
-from fastapi.responses import JSONResponse
-
-from config import config
-from logger import LOGGING
-
-from api.v1 import test
-
-app = FastAPI(
-    title='CDN API',
-    docs_url='/api/openapi',
-    openapi_url='/api/openapi.json',
-    default_response_class=JSONResponse)
+from service.config import config
+from service.logger import LOGGING
+from service.app import create_app
 
 
-@app.on_event('startup')
-async def startup():
-    pass
-
-
-@app.on_event('shutdown')
-async def shutdown():
-    pass
-
-
-app.include_router(test.router, prefix='/api/v1', tags=['test'])
-
+app = create_app()
 
 def volumes_check():
     # удалить после появления полноценных тестов
