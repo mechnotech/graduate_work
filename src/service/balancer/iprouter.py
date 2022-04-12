@@ -9,6 +9,8 @@ from typing import List
 from .models import (FilmRequest,
                      CDNServerRecord)
 
+CDN_BUSY_LIMIT = 0.95
+
 
 class AbstractIpRouter(abc.ABC):
 
@@ -26,15 +28,17 @@ class SimpleIpRouter(AbstractIpRouter):
         return cdn_servers[0]
 
 
-async def closest_distance(servers: List[CDNServerRecord], film_request: FilmRequest) -> CDNServerRecord:
-    simple_closest = 2**32
-    pos = 0
-    for i, server in enumerate(servers):
-        distance = abs(int(server.cdn_server_id) - int(film_request.user_ip))
-        if simple_closest > distance and server.loading < 0.85:
-            simple_closest = distance
-            pos = i
-    return servers[pos]
+async def closest_distance(servers: List[CDNServerRecord], film_request: FilmRequest) -> List:
+    """
+    Pseudo Geo IP функция.
+    Исходя из предположения, что разница по модулю между IP будет минимальна для адресов из одной подсети.
+    Возвращает сервер с ближайшим IP к IP пользователя расчетным путем.
+
+    :param servers: Список записей кандидатов CDNServerRecord
+    :param film_request: Запрос пользователя FilmRequest
+    :return: Сортированный по близости к пользователю CDNServerRecord
+    """
+    return sorted(servers, key=lambda x: abs(int(x.cdn_server_ip) - int(film_request.user_ip)))
 
 
 class IpRouter(AbstractIpRouter):
@@ -43,16 +47,15 @@ class IpRouter(AbstractIpRouter):
                          cdn_request: FilmRequest,
                          cdn_servers: List[CDNServerRecord]) -> CDNServerRecord:
 
-        def no_less_quality(serv):
+        def no_less_quality(server):
             parsed_quality = cdn_request.quality
-            for rate in serv.quality:
+            for rate in server.quality:
                 if int(parsed_quality) <= int(rate):
-                    return serv.quality
+                    return server.quality
 
         if len(cdn_servers) == 1:
             return cdn_servers[0]
 
-        # cdn_servers = sorted(cdn_servers, key=lambda x: x.loading)
         best_servers = list(filter(no_less_quality, cdn_servers))
 
         if best_servers:
@@ -60,4 +63,8 @@ class IpRouter(AbstractIpRouter):
         else:
             closest = await closest_distance(cdn_servers, cdn_request)
 
-        return closest
+        for serv in closest:
+            if serv.loading < CDN_BUSY_LIMIT:
+                return serv
+
+        return closest[0]
