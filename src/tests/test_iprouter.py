@@ -68,6 +68,22 @@ async def test_sever_not_busy(init_params):
 
 
 @pytest.mark.asyncio
+async def test_barely_live_server(init_params):
+    """
+    Выбран сервер с допустимой загруженностью CDN_BUSY_LIMIT (все остальные заняты)
+    """
+    load_score = 0.99
+    servers = init_params[0]
+    for serv in servers:
+        serv.loading = 1
+    servers[-1].loading = load_score
+    film_request = init_params[1]
+    router = init_params[2]
+    res = await router.select_cdn(cdn_servers=servers, cdn_request=film_request)
+    assert res.loading == load_score
+
+
+@pytest.mark.asyncio
 async def test_sever_has_quality(init_params):
     """
     Сервер имеет фильм в качестве не менее чем запрошенное
