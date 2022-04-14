@@ -5,10 +5,10 @@ server {
 
     root /;
 
-    location @backend {
-        limit_req zone=one burst=12 delay=8;
-        proxy_pass http://cdn_service:8080;
-    }
+#    location @backend {
+#        limit_req zone=one burst=12 delay=8;
+#        proxy_pass http://cdn_service:8080;
+#    }
     location /cdn/master/ {
     mp4;
     mp4_buffer_size     5m;
@@ -177,4 +177,4 @@ server {
 #     location = /50x.html {
 #         root   html;
 #     }
-} 
+}
