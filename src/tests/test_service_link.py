@@ -17,6 +17,10 @@ from service.config import config
 
 class TestBroker(AbstractBroker):
 
+    async def calc_link(self,
+                        cdn_request: FilmRequest) -> Optional[FilmResponse]:
+        pass
+
     async def get_link(self,
                        cdn_request: FilmRequest) -> Optional[FilmResponse]:
         if cdn_request.file_uuid.startswith('1'):
