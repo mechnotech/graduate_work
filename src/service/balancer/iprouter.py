@@ -22,6 +22,7 @@ class AbstractIpRouter(abc.ABC):
 
 
 class SimpleIpRouter(AbstractIpRouter):
+
     async def select_cdn(self,
                          cdn_request: FilmRequest,
                          cdn_servers: List[CDNServerRecord]) -> CDNServerRecord:

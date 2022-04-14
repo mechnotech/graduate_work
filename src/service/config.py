@@ -14,6 +14,13 @@ class BaseConfig(BaseSettings):
     api_loglevel: int = Field(default=logging.DEBUG,
                               env='CDN_API_DEBUG_LEVEL')
 
+    db_user: str = Field(default='postgres', env='CDN_DB_USER')
+    db_password: str = Field(default='password', env='CDN_DB_PASSWORD')
+    db_host: str = Field(default='localhost', env='CDN_DB_HOST')
+    db_base: str = Field(default='cdn', env='CDN_DB_BASE')
+
+    redis_host: str = Field(default='localhost', env='CDN_REDIS_HOST')
+
     cdn_main: str = Field(default='data/cdn_main', env='CDN_STOR_MAIN')
     cdn_1: str = Field(default='data/cdn_1', env='CDN_STOR_1')
     cdn_2: str = Field(default='data/cdn_2', env='CDN_STOR_2')
