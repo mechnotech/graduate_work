@@ -28,5 +28,7 @@ class BaseConfig(BaseSettings):
     cdn_var_expiration_def: int = Field(default=60*180, env='CDN_V_EXPIRATION_DEF')
     cdn_var_expiration_mul: float = Field(default=1.2, env='CDN_V_EXPERATION_MUL')
 
+    cdn_counter_expiration: int = Field(default=60*60, env='CDN_COUNTER_EXPIRATION')
+
 
 config = BaseConfig()
