@@ -70,7 +70,7 @@ async def test_sever_not_busy(init_params):
 @pytest.mark.asyncio
 async def test_barely_live_server(init_params):
     """
-    Выбран сервер с допустимой загруженностью CDN_BUSY_LIMIT (все остальные заняты)
+    Выбран сервер с минимальной загруженностью даже если он выше CDN_BUSY_LIMIT (все остальные заняты)
     """
     load_score = 0.99
     servers = init_params[0]
