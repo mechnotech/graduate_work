@@ -68,4 +68,5 @@ class IpRouter(AbstractIpRouter):
             if serv.loading < CDN_BUSY_LIMIT:
                 return serv
 
+        closest.sort(key=lambda x: x.loading)
         return closest[0]
