@@ -1,3 +1,4 @@
+import time
 import uuid
 
 import pytest
@@ -118,3 +119,33 @@ async def test_get_sever_stats_only(redis_connect):
     await counter.put(server_id=server_id, film_uuid=film_uuid, quality=quality)
     result = await counter.get_counter(server_id=server_id)
     assert result == 3
+
+
+@pytest.mark.asyncio
+async def test_refresh_ttl(redis_connect):
+    ttl = 3
+    counter = RedisCounter(redis_connect, ttl=ttl)
+    server_id = str(uuid.uuid4())
+    film_uuid = str(uuid.uuid4())
+    quality = '360'
+    key = f'{server_id}.{film_uuid}.{quality}'
+    await counter.put(server_id=server_id, film_uuid=film_uuid, quality=quality)
+    time.sleep(1.5)
+    await counter.put(server_id=server_id, film_uuid=film_uuid, quality=quality)
+    result = await redis_connect.ttl(name=key)
+    assert result == 3
+
+
+@pytest.mark.asyncio
+async def test_expired_ttl(redis_connect):
+    ttl = 1
+    counter = RedisCounter(redis_connect, ttl=ttl)
+    server_id = str(uuid.uuid4())
+    film_uuid = str(uuid.uuid4())
+    quality = '360'
+    await counter.put(server_id=server_id, film_uuid=film_uuid, quality=quality)
+    await counter.put(server_id=server_id, film_uuid=film_uuid, quality=quality)
+    await counter.put(server_id=server_id, film_uuid=film_uuid, quality=quality)
+    time.sleep(1.5)
+    result = await counter.get_counter(server_id=server_id, film_uuid=film_uuid, quality=quality)
+    assert result == 0
