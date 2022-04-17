@@ -9,6 +9,8 @@ from typing import Optional
 
 from aioredis import Redis
 
+from service.config import config
+
 
 class AbstractCounter(abc.ABC):
 
@@ -26,7 +28,7 @@ class AbstractCounter(abc.ABC):
 
 class RedisCounter(AbstractCounter):
 
-    def __init__(self, redis: Redis, ttl: int = 5):
+    def __init__(self, redis: Redis, ttl: int = config.cdn_counter_expiration):
         self.redis = redis
         self.ttl = ttl
 
