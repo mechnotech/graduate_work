@@ -26,11 +26,14 @@ class AbstractCounter(abc.ABC):
 
 class RedisCounter(AbstractCounter):
 
-    def __init__(self, redis: Redis):
+    def __init__(self, redis: Redis, ttl: int = 5):
         self.redis = redis
+        self.ttl = ttl
 
     async def put(self, server_id: str, film_uuid: str, quality: str) -> bool:
-        await self.redis.incr(name=f'{server_id}.{film_uuid}.{quality}')
+        key = f'{server_id}.{film_uuid}.{quality}'
+        await self.redis.incr(name=key)
+        await self.redis.expire(name=key, time=self.ttl)
         return True
 
     async def get_counter(self,
@@ -68,7 +71,7 @@ class RedisCounter(AbstractCounter):
     фукция put в идеале должна кинуть запрос и не дожидаясь ответа от redis
     отдать управление
 
-    get_counter показывает запросы по серверу если остальное None
+    get_counter показывает запросы по серверу если остальное None +
                             запросы по фильму независимо от качества +
                             запросы по фильму с конкретным качеством +
                             спросить про качество без фильма нельзя +
