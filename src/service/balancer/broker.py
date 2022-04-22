@@ -11,7 +11,7 @@ from .models import (FilmRequest,
                      FilmResponse,
                      CDNServerRecord)
 from .iprouter import AbstractIpRouter
-from .cdnmanger import AbstractCDNManager
+from .cdnmanager import AbstractCDNManager
 
 
 class AbstractBroker(abc.ABC):

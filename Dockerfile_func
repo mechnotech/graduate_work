@@ -9,6 +9,7 @@ WORKDIR /app
 COPY requirements.txt /app/requirements.txt
 COPY requirements.dev.txt /app/requirements.dev.txt
 COPY src/wait_for_pg.py /app/wait_for_pg.py
+COPY src/wait_for_redis.py /app/wait_for_redis.py
 
 RUN apk update --no-cache \
 && apk add build-base --no-cache --virtual .build-deps \
@@ -19,4 +20,4 @@ RUN apk update --no-cache \
 COPY src/service/ /app/service/
 COPY src/functional/ /app/functional/
 
-ENTRYPOINT pytest -s -v --asyncio-mode=strict functional/
+ENTRYPOINT python3 wait_for_pg.py; python3 wait_for_redis.py; pytest -s -v --asyncio-mode=strict functional/
