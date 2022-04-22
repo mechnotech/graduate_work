@@ -50,7 +50,7 @@ build:
 debug:
 	make build
 	make stage_up
-	docker run --rm --net=host \
+	-docker run --rm --net=host \
 	--mount source=cdn_main,destination=/app/data/cdn_main \
 	--mount source=cdn_1,destination=/app/data/cdn_1 \
 	--mount source=cdn_2,destination=/app/data/cdn_2 \

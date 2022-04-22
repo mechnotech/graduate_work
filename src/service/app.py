@@ -10,6 +10,8 @@ from fastapi.responses import JSONResponse
 from service.api.v1 import link
 
 from service.balancer.broker import MainBroker
+from service.balancer.iprouter import IpRouter
+from service.balancer.cdnmanager import MainCDNManager
 
 
 def create_app():
@@ -17,7 +19,12 @@ def create_app():
                   docs_url='/api/openapi',
                   openapi_url='/api/openapi.json',
                   default_response_class=JSONResponse)
-    broker = MainBroker()
+
+    ip_router = IpRouter()
+    cdn_manager = MainCDNManager()
+
+    broker = MainBroker(ip_router=ip_router,
+                        cdn_manager=cdn_manager)
 
     @app.middleware("http")
     async def broker_session_middleware(request: Request, call_next):
