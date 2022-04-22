@@ -13,7 +13,7 @@ from service.balancer.models import (FilmRequest,
                                      FilmResponse,
                                      CDNServerRecord)
 from service.balancer.iprouter import AbstractIpRouter
-from service.balancer.cdnmanger import AbstractCDNManager
+from service.balancer.cdnmanager import AbstractCDNManager
 from service.balancer.broker import MainBroker
 
 FILE_UUID = str(uuid.uuid4())

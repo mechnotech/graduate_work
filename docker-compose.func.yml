@@ -18,21 +18,6 @@ services:
     ports:
       - "6379:6379"
 
-  cdn_service:
-    image: cdn_image
-    volumes:
-      - cdn_main:/app/data/cdn_main
-      - cdn_1:/app/data/cdn_1
-      - cdn_2:/app/data/cdn_2
-    depend_on:
-      - db
-      - redis
-      - cdn_main
-      - cdn_1
-      - cdn_2
-    ports:
-      - "8080:8080"
-
   nginx_cdn_main:
     image: nginx:1.19.2
     container_name: nginx_cdn_main
@@ -69,6 +54,20 @@ services:
     env_file:
       - nginx/.env.example
 
+  cdn_service:
+    image: cdn_image
+    volumes:
+      - cdn_main:/app/data/cdn_main
+      - cdn_1:/app/data/cdn_1
+      - cdn_2:/app/data/cdn_2
+    depends_on:
+      - db
+      - redis
+      - nginx_cdn_main
+      - nginx_cdn_1
+      - nginx_cdn_2
+    ports:
+      - "8080:8080"
 
 volumes:
   cdn_main:
