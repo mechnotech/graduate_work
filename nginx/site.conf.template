@@ -85,6 +85,32 @@ server {
 
 }
 
+    location /cdn/360p/ {
+    mp4;
+    mp4_buffer_size     1m;
+    mp4_max_buffer_size 5m;
+
+
+    limit_conn ip_addr 1;
+    limit_rate ${LIMIT_RATE_360};
+
+    try_files $uri $uri/ =404;
+
+    secure_link $arg_md5,$arg_expires;
+    secure_link_md5 "$secure_link_expires $uri $remote_addr ${SECRET_KEY}";
+
+    if ($secure_link = "") {
+        return 403;
+    }
+
+    if ($secure_link = "0") {
+        return 410;
+    }
+
+    alias /cdn/;
+
+}
+
     location /cdn/480p/ {
     mp4;
     mp4_buffer_size     1m;
