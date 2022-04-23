@@ -12,6 +12,7 @@ from .models import (FilmRequest,
                      CDNServerRecord)
 from .iprouter import AbstractIpRouter
 from .cdnmanager import AbstractCDNManager
+from .balancer import AbstractBalancer
 
 
 class AbstractBroker(abc.ABC):
@@ -38,7 +39,8 @@ class MainBroker(AbstractBroker):
 
     def __init__(self,
                  ip_router: AbstractIpRouter,
-                 cdn_manager: AbstractCDNManager):
+                 cdn_manager: AbstractCDNManager,
+                 balancer: AbstractBalancer = None):
         self.ip_router = ip_router
         self.cdn_manager = cdn_manager
 

@@ -19,31 +19,50 @@ class MainCDNManager(AbstractCDNFileManager):
 
     async def find(self,
                    cdn_request: FilmRequest) -> Optional[List[CDNServerRecord]]:
-        request = """SELECT ff.
-                     FROM film_file ff
+        file_uuid = cdn_request.file_uuid
+        request = """SELECT cs.server_id,
+                            cs.server_ip,
+                            array_agg(DISTINCT ff.quality) as quality
+                     FROM film_file ff,
+                          cdn_server cs
+                     WHERE cs.server_id = ff.server_id AND film_uuid=%s
+                     GROUP BY cs.server_id
+                     ORDER BY cs.server_id"""
 
-                     WHERE film_uuid=%s"""
         async with self.db_connect.cursor() as cur:
-            await cur.execute(request, (cdn_request.file_uuid, ))
-            print(list(await cur.fetchall()))
-
-
- #       if cdn_request.file_uuid.startswith('1'):
- #           return None
- #       if cdn_request.file_uuid.startswith('2'):
- #           return [CDNServerRecord(cdn_server_id='cdn_1',
- #                                   cdn_server_ip=IPv4Address('192.168.1.222'),
- #                                   loading=0.5,
- #                                   file_uuid='file_uuid',
- #                                   quality=["240", "360"]), ]
+            await cur.execute(request, (file_uuid, ))
+            sql_result = await cur.fetchall()
+        return list(map(lambda x: CDNServerRecord(cdn_server_id=x[0],
+                                                  cdn_server_ip=x[1],
+                                                  loading=0.5,
+                                                  file_uuid=file_uuid,
+                                                  quality=x[2]),
+                        sql_result))
 
     async def prepare(self,
                       cdn_request: FilmRequest,
                       cdn_server_select: CDNServerRecord) -> FilmResponse:
-        return FilmResponse(path=cdn_request.file_uuid,
-                            cdn_server_url=cdn_server_select.cdn_server_id,
-                            cdn_server_key='secure_key',
-                            length_sec=2500)
+        request = """SELECT ff.url_path,
+                            cs.server_path,
+                            cs.secret_key,
+                            ff.length_sec
+                      FROM film_file ff,
+                           cdn_server cs
+                      WHERE cs.server_id = ff.server_id AND
+                            cs.server_id = %s AND
+                            ff.film_uuid = %s AND
+                            ff.quality= %s"""
+        async with self.db_connect.cursor() as cur:
+            await cur.execute(request,
+                              (cdn_server_select.cdn_server_id,
+                               cdn_request.file_uuid,
+                               cdn_server_select.quality[-1], ))
+            sql_result = await cur.fetchone()
+
+        return FilmResponse(path=sql_result[0],
+                            cdn_server_url=sql_result[1],
+                            cdn_server_key=sql_result[2],
+                            length_sec=sql_result[3])
 
     def file_move(self,
                   cdn_id_recipient: str,
