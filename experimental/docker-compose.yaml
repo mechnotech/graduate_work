@@ -1,16 +1,16 @@
 version: '3.5'
 services:
-  cdn_api:
+  cdn_api_main:
     build: cdn_backend/
-    container_name: cdn_api
+    container_name: cdn_api_main
     volumes:
       - cdn_nginx:/code/src/cdn/
     env_file:
       - cdn_backend/.env.example
 
-  cdn_nginx:
+  cdn_nginx_main:
       image: nginx:1.19.2
-      container_name: cdn_nginx
+      container_name: cdn_nginx_main
       volumes:
         - ./cdn_nginx/nginx.conf:/etc/nginx/nginx.conf:ro
         - ./cdn_nginx/site.conf.template:/etc/nginx/templates/site.conf.template
@@ -18,7 +18,29 @@ services:
       ports:
         - "80:80"
       depends_on:
-        - cdn_api
+        - cdn_api_main
+      env_file:
+        - cdn_backend/.env.example
+
+  mirror_api:
+    build: cdn_backend/
+    container_name: mirror_api
+    volumes:
+      - mirror_cdn:/code/src/cdn/
+    env_file:
+      - cdn_backend/.env.example
+
+  mirror_nginx:
+      image: nginx:1.19.2
+      container_name: mirror_nginx
+      volumes:
+        - ./cdn_mirror/nginx.conf:/etc/nginx/nginx.conf:ro
+        - ./cdn_mirror/site.conf.template:/etc/nginx/templates/site.conf.template
+        - mirror_cdn:/cdn/
+      ports:
+        - "81:80"
+      depends_on:
+        - mirror_api
       env_file:
         - cdn_backend/.env.example
 
@@ -26,3 +48,5 @@ services:
 volumes:
     cdn_nginx:
       name: tests_cdn_nginx
+    mirror_cdn:
+      name: mirror_cdn
