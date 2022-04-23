@@ -60,6 +60,8 @@ services:
       - cdn_main:/app/data/cdn_main
       - cdn_1:/app/data/cdn_1
       - cdn_2:/app/data/cdn_2
+    environment:
+      - CDN_DB_HOST=db
     depends_on:
       - db
       - redis

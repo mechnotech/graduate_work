@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS cdn_server (
     secret_key varchar(36),
     description text,
     is_main boolean,
-    url_path text
+    stor_path text
 );
 
 CREATE TABLE IF NOT EXISTS film_file (
