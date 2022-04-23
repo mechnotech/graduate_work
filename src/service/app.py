@@ -15,7 +15,7 @@ from service.balancer.iprouter import IpRouter
 from service.balancer.cdnmanager import MainCDNManager
 
 from service.config import config
-
+from service.balancer.cdnmanager.create_db import recreate
 
 class BrokerWrap():
 
@@ -53,6 +53,8 @@ def create_app():
 
     @app.on_event('startup')
     async def startup():
+        if config.db_recreate:
+            await recreate()
         await broker_wrap.connect()
 
     @app.on_event('shutdown')

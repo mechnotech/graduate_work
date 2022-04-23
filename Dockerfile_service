@@ -14,7 +14,10 @@ RUN apk update --no-cache \
 && pip install --no-cache-dir -r requirements.txt \
 && apk del .build-deps
 
+
+COPY src/wait_for_pg.py /app/wait_for_pg.py
+COPY src/wait_for_redis.py /app/wait_for_redis.py
 COPY src/service/  /app/service/
 COPY src/main.py /app/main.py
 
-CMD ["python3", "main.py"]
+CMD python3 wait_for_pg.py; python3 wait_for_redis.py; python3 main.py

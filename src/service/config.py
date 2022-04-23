@@ -14,6 +14,7 @@ class BaseConfig(BaseSettings):
     api_loglevel: int = Field(default=logging.DEBUG,
                               env='CDN_API_DEBUG_LEVEL')
 
+    db_recreate: bool = Field(default=False, env='CDN_DB_RECREATE')
     db_user: str = Field(default='postgres', env='CDN_DB_USER')
     db_password: str = Field(default='password', env='CDN_DB_PASSWORD')
     db_host: str = Field(default='localhost', env='CDN_DB_HOST')
