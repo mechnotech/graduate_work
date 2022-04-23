@@ -62,6 +62,8 @@ services:
       - cdn_2:/app/data/cdn_2
     environment:
       - CDN_DB_HOST=db
+      - CDN_DB_RECREATE=true
+      - CDN_REDIS_HOST=redis
     depends_on:
       - db
       - redis
