@@ -4,7 +4,7 @@ import uuid
 
 import pytest
 
-from service.balancer.files import gen_file_name
+from service.balancer.cdnmanager.files import gen_file_name
 
 API_URL = 'http://localhost:8080'
 

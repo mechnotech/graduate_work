@@ -1,5 +1,6 @@
-import glob
-from shutil import copy
+
+
+from ipaddress import IPv4Address
 
 import pytest
 import pytest_asyncio
@@ -9,7 +10,8 @@ import aiopg
 from service.config import config
 from service.balancer.cdnmanager.create_db import recreate
 
-from service.balancer.models import FilmRequest
+from service.balancer.models import (FilmRequest,
+                                     CDNServerRecord)
 
 from service.balancer.cdnmanager.cdnfilemanager import MainCDNManager as CDNManager
 
@@ -48,11 +50,6 @@ async def db_connect():
 
 @pytest.fixture(scope='function')
 def file_place():
-    #  copy files
-    copy('tests/demo/22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4',
-         'service/data/22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4')
-
-    # print(list(glob.iglob('service/data/*.mp4')))
     # 8f28972c-7644-4bbd-9e29-0d914912232a
     # a4d0691a-9fa4-4157-afa9-a87a2a990823
     # 22e7c14e-8c47-4155-aafc-a123d45fd357
@@ -61,7 +58,7 @@ def file_place():
 
 @pytest.mark.asyncio
 async def test_init(db_connect, file_place):
-    cdn_manager = CDNManager(db_connect)
+    _ = CDNManager(db_connect)
 
 
 @pytest.mark.asyncio
@@ -71,3 +68,20 @@ async def test_find(db_connect):
                               file_uuid='22e7c14e-8c47-4155-aafc-a123d45fd357',
                               quality='480')
     result = await cdn_manager.find(cdn_request)
+    assert result[2].quality == ['360', '720']
+
+
+@pytest.mark.asyncio
+async def test_prepare(db_connect):
+    cdn_manager = CDNManager(db_connect)
+    cdn_request = FilmRequest(user_ip=IPv4Address('192.168.3.177'),
+                              file_uuid='22e7c14e-8c47-4155-aafc-a123d45fd357',
+                              quality='720')
+    server_select = CDNServerRecord(cdn_server_id='cdn_main',
+                                    cdn_server_ip=IPv4Address('192.168.1.2'),
+                                    loading=0.5,
+                                    file_uuid='22e7c14e-8c47-4155-aafc-a123d45fd357',
+                                    quality=['360', '720'])
+    result = await cdn_manager.prepare(cdn_request, server_select)
+    assert result.cdn_server_url == 'localhost:8081'
+    assert result.length_sec == 100
