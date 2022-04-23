@@ -11,8 +11,7 @@ def test_check():
     data = response.json()
     assert data['mssg'] == 'Hello world'
 
-
 def test_volume():
-    with open('data/cdn_main/hint.txt', 'rt') as fobj:
+    with open('data/cdn_1/hint.txt', 'rt') as fobj:
         text = fobj.read()
-    assert text == 'cdn main'
+    assert text == 'cdn 1'

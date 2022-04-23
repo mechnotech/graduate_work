@@ -1,6 +1,4 @@
 
-import pprint
-import uuid
 import requests
 from http import HTTPStatus
 from functional.conftest import API_URL
