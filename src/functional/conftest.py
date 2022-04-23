@@ -29,6 +29,7 @@ INSERT INTO film_file  VALUES ('90553348-db14-485e-8aa7-7e263c74f86b', 'cdn_main
 INSERT INTO film_file  VALUES ('54c9669c-7102-4013-8c5e-ee7e15d32944', 'cdn_1', '22e7c14e-8c47-4155-aafc-a123d45fd357', '360', 100, '22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4', '22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4');
 INSERT INTO film_file  VALUES ('81555db1-e697-40ae-a529-1853bc209614', 'cdn_2', '22e7c14e-8c47-4155-aafc-a123d45fd357', '360', 100, '22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4', '22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4');
 
+
 INSERT INTO film_file  VALUES ('bd5e2ac8-65e4-42e0-8625-9ad7cf32eaf8', 'cdn_main', 'a4d0691a-9fa4-4157-afa9-a87a2a990823', '360', 100, 'a4d0691a-9fa4-4157-afa9-a87a2a990823.360.mp4', 'a4d0691a-9fa4-4157-afa9-a87a2a990823.360.mp4');
 INSERT INTO film_file  VALUES ('de66450d-2a84-465b-b160-bf6a024f22b8', 'cdn_main', 'a4d0691a-9fa4-4157-afa9-a87a2a990823', '720', 100, 'a4d0691a-9fa4-4157-afa9-a87a2a990823.720.mp4', 'a4d0691a-9fa4-4157-afa9-a87a2a990823.720.mp4');
 """
@@ -50,11 +51,11 @@ def data_set():
     # a4d0691a-9fa4-4157-afa9-a87a2a990823
     # 22e7c14e-8c47-4155-aafc-a123d45fd357
 
-    files = [{'name': '22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4',  #  gen_file_name(file_uuid, quality),
+    files = [{'name': '22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4',
               'file_uuid': '22e7c14e-8c47-4155-aafc-a123d45fd357',
               'quality': '360'}]
     ret_set = {'files': files,
-               'user_ip': ['192.168.1.11', ],
+               'user_ip': ['192.168.1.117', ],
                '404_file': str(uuid.uuid4())}
 
     yield ret_set
