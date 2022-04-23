@@ -4,6 +4,7 @@ Link business logic
 import base64
 import datetime
 import hashlib
+import logging
 
 from functools import lru_cache
 from http import HTTPStatus
@@ -38,6 +39,7 @@ class LinkService():
         file_response = await broker.get_link(film_request)
 
         if file_response is None:
+            logging.warning(f"file_uuid {file_uuid} not found")
             raise HTTPException(status_code=HTTPStatus.NOT_FOUND,
                                 detail='File not found')
 

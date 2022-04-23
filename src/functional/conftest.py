@@ -1,5 +1,6 @@
-
+import glob
 import logging
+import os
 import uuid
 
 import pytest
@@ -18,8 +19,8 @@ TEST_DATA_SQL = """
 -- server records
 DELETE FROM cdn_server;
 INSERT INTO cdn_server VALUES ('cdn_main', '192.168.1.2', 'localhost:8081', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn_main', true, '');
-INSERT INTO cdn_server VALUES ('cdn_1', '192.168.2.2', 'localhost:8082', '58591d34-0c4b-43ad-83dc-082165ddd4cf', 'cdn 1', false, '');
-INSERT INTO cdn_server VALUES ('cdn_2', '192.168.3.2', 'localhost:8083', '7f768d32-a4fa-4086-98bd-708ed82cf69a', 'cdn 2', false, '');
+INSERT INTO cdn_server VALUES ('cdn_1', '192.168.2.2', 'localhost:8082', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn 1', false, '');
+INSERT INTO cdn_server VALUES ('cdn_2', '192.168.3.2', 'localhost:8083', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn 2', false, '');
 
 -- file records
 DELETE FROM film_file;
@@ -45,11 +46,17 @@ def data_set():
 
     with conn.cursor() as cur:
         cur.execute(TEST_DATA_SQL)
+    conn.commit()
     conn.close()
     # file uuid for test
     # 8f28972c-7644-4bbd-9e29-0d914912232a
     # a4d0691a-9fa4-4157-afa9-a87a2a990823
     # 22e7c14e-8c47-4155-aafc-a123d45fd357
+    for file_name in list(glob.iglob('data/cdn_main/*')):
+        os.remove(file_name)
+    with open('data/cdn_main/22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4',
+              'wt') as file_obj:
+        file_obj.write("22e7 360")
 
     files = [{'name': '22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4',
               'file_uuid': '22e7c14e-8c47-4155-aafc-a123d45fd357',
