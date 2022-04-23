@@ -32,10 +32,6 @@ class LinkService():
                   quality: int,
                   start_position: Optional[int]) -> LinkResponse:
 
-        ret = LinkResponse(link='http://fake_link',
-                           length_sec=8045,
-                           start_position=0)
-
         film_request = FilmRequest(user_ip=user_ip,
                                    file_uuid=file_uuid,
                                    quality=quality)
