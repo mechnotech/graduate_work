@@ -20,4 +20,4 @@ RUN apk update --no-cache \
 COPY src/service/ /app/service/
 COPY src/functional/ /app/functional/
 
-ENTRYPOINT python3 wait_for_pg.py; python3 wait_for_redis.py; pytest -s -v --asyncio-mode=strict functional/
+ENTRYPOINT python3 wait_for_pg.py; python3 wait_for_redis.py; pytest -o log_cli=true -s -v --asyncio-mode=strict --log-cli-level=INFO functional/
