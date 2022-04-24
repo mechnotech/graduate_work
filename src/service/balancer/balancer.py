@@ -14,5 +14,9 @@ class AbstractBalancer():
         self.cdn_manager = cdn_manager
 
     @abc.abstractmethod
-    def check(self):
-        """ check and balance files between cdn server"""
+    async def put(self):
+        """ put requests stats server"""
+
+    @abc.abstractmethod
+    async def balance(self):
+        """ balance file between cdn"""
