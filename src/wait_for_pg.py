@@ -1,4 +1,7 @@
+
+import logging
 import sys
+
 import asyncio
 import aiopg
 import psycopg2
@@ -9,9 +12,12 @@ from service.config import config
 TRYS_SECONDS = 20
 
 
+logging.basicConfig(level=logging.INFO)
+
+
 async def try_connect():
     """ async test connection """
-    print("Try Postgresql connect")
+    logging.info("Try Postgresql connect")
     try:
         async with async_timeout.timeout(TRYS_SECONDS):
             while True:
@@ -21,13 +27,14 @@ async def try_connect():
                                                host=config.db_host,
                                                timeout=1)
                     await conn.close()
-                    print('Postgresql ready')
+                    logging.info('Postgresql ready')
                     sys.exit(0)
                 except psycopg2.Error:
-                    print('Next try')
+                    logging.warning("Can't connect waiting for next try")
                     await asyncio.sleep(1)
 
     except asyncio.TimeoutError:
+        logging.critical("Can't connect")
         sys.exit(1)
 
 

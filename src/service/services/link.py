@@ -21,7 +21,7 @@ from service.models.link import LinkResponse
 from service.balancer.broker import AbstractBroker
 from service.balancer.models import FilmRequest
 
-LINK_MASK = "http://{server}/{path}?md5={key}&expires={expiration}&start={start}"
+LINK_MASK = "{server}/{path}?md5={key}&expires={expiration}&start={start}"
 
 
 class LinkService():

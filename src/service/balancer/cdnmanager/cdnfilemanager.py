@@ -64,23 +64,3 @@ class MainCDNManager(AbstractCDNFileManager):
                             cdn_server_url=sql_result[1],
                             cdn_server_key=sql_result[2],
                             length_sec=sql_result[3])
-
-    async def file_move(self,
-                        cdn_id_recipient: str,
-                        file_uuid: str,
-                        quality: str):
-
-        request = """SELECT cs.stor_path,
-                            ff.disk_path
-                     FROM cdn_server cs,
-                          film_file ff
-                     WHERE cs.is_main = true AND
-                           cs.server_id = ff.server_id AND
-                           ff.film_uuid = %s AND
-                           ff.quality = %s"""
-
-        async with self.db_connect.cursor() as cur:
-            await cur.execute(request, (file_uuid, quality, ))
-            main_result = await cur.fetchone()
-        if not main_result:
-            raise ValueError()

@@ -6,10 +6,10 @@ import abc
 
 from typing import List
 
+from service.config import config
+
 from .models import (FilmRequest,
                      CDNServerRecord)
-
-CDN_BUSY_LIMIT = 0.95
 
 
 class AbstractIpRouter(abc.ABC):
@@ -65,7 +65,7 @@ class IpRouter(AbstractIpRouter):
             closest = await closest_distance(cdn_servers, cdn_request)
 
         for serv in closest:
-            if serv.loading < CDN_BUSY_LIMIT:
+            if serv.loading < config.cdn_busy_limit:
                 return serv
 
         closest.sort(key=lambda x: x.loading)

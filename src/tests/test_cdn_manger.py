@@ -18,9 +18,9 @@ from service.balancer.models import (FilmRequest,
 from service.balancer.cdnmanager.cdnfilemanager import MainCDNManager as CDNManager
 
 TEST_DATA_SQL = """
-INSERT INTO cdn_server VALUES ('cdn_main', '192.168.1.2', 'localhost:8081', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn_main', true, '');
-INSERT INTO cdn_server VALUES ('cdn_1', '192.168.2.2', 'localhost:8082', '58591d34-0c4b-43ad-83dc-082165ddd4cf', 'cdn 1', false, '');
-INSERT INTO cdn_server VALUES ('cdn_2', '192.168.3.2', 'localhost:8083', '7f768d32-a4fa-4086-98bd-708ed82cf69a', 'cdn 2', false, '');
+INSERT INTO cdn_server VALUES ('cdn_main', '192.168.1.2', 'http://localhost:8081', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn_main', true, '');
+INSERT INTO cdn_server VALUES ('cdn_1', '192.168.2.2', 'http://localhost:8082', '58591d34-0c4b-43ad-83dc-082165ddd4cf', 'cdn 1', false, '');
+INSERT INTO cdn_server VALUES ('cdn_2', '192.168.3.2', 'http://localhost:8083', '7f768d32-a4fa-4086-98bd-708ed82cf69a', 'cdn 2', false, '');
 
 -- file records
 INSERT INTO film_file  VALUES ('63e1b243-2d2a-4aa1-aa20-5ee62b4af2f9', 'cdn_main', '22e7c14e-8c47-4155-aafc-a123d45fd357', '360', 100, '22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4', '22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4');
@@ -102,23 +102,5 @@ async def test_prepare(db_connect):
                                     file_uuid='22e7c14e-8c47-4155-aafc-a123d45fd357',
                                     quality=['360', '720'])
     result = await cdn_manager.prepare(cdn_request, server_select)
-    assert result.cdn_server_url == 'localhost:8081'
+    assert result.cdn_server_url == 'http://localhost:8081'
     assert result.length_sec == 100
-
-
-@pytest.mark.asyncio
-async def test_file_move(db_connect, file_place):
-    cdn_manager = CDNManager(db_connect)
-    # print(list(glob.iglob('service/data/cdn_main/*')))
-
-    with pytest.raises(ValueError):
-        await cdn_manager.file_move('cdn_2',
-                                    'a2e7c14e-8c47-4155-aafc-a123d45fd357',
-                                    '720')
-
-
-
-
-
-
-#

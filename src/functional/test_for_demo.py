@@ -21,6 +21,7 @@ def test_demo(data_set):
     response_json = response.json()
     assert 'localhost:8081' in response_json['link']
     logging.info("ip 192.168.1.117 перенаправил на cdn_main ip 192.168.1.2")
+    logging.debug(response_json['link'])
 
     user_ip = '192.168.3.177'
     response = requests.get(URL.format(uuid=film_uuid,
@@ -29,3 +30,4 @@ def test_demo(data_set):
     response_json = response.json()
     assert 'localhost:8083' in response_json['link']
     logging.info("ip 192.168.3.117 перенаправил на cdn_main ip 192.168.3.2")
+    logging.debug(response_json['link'])

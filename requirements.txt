@@ -2,7 +2,7 @@ pydantic[dotenv]==1.8.2
 requests==2.27.1
 pyjwt==2.3.0
 aiohttp==3.8.1
-fastapi==0.70.0
+fastapi==0.75.1
 async-timeout==4.0.1
 uvicorn[standart]==0.17.6
 aioredis==2.0.0

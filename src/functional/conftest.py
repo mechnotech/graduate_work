@@ -18,9 +18,9 @@ logging.getLogger('requests').setLevel(logging.CRITICAL)
 TEST_DATA_SQL = """
 -- server records
 DELETE FROM cdn_server;
-INSERT INTO cdn_server VALUES ('cdn_main', '192.168.1.2', 'localhost:8081', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn_main', true, '');
-INSERT INTO cdn_server VALUES ('cdn_1', '192.168.2.2', 'localhost:8082', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn 1', false, '');
-INSERT INTO cdn_server VALUES ('cdn_2', '192.168.3.2', 'localhost:8083', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn 2', false, '');
+INSERT INTO cdn_server VALUES ('cdn_main', '192.168.1.2', 'http://localhost:8081', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn_main', true, '');
+INSERT INTO cdn_server VALUES ('cdn_1', '192.168.2.2', 'http://localhost:8082', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn 1', false, '');
+INSERT INTO cdn_server VALUES ('cdn_2', '192.168.3.2', 'http://localhost:8083', 'dc34ea0b-642d-4709-8b6e-07161aaed244', 'cdn 2', false, '');
 
 -- file records
 DELETE FROM film_file;

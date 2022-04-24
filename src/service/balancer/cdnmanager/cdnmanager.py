@@ -29,36 +29,4 @@ class AbstractCDNManager(abc.ABC):
 
 
 class AbstractCDNFileManager(AbstractCDNManager):
-
-    @abc.abstractmethod
-    def file_move(self,
-                  cdn_id_recipient: str,
-                  file_uuid: str,
-                  quality: List[str]):
-        pass
-
-#   @abc.abstractmethod
-#   def cdn_list(self) -> List[CDNFileServerRecord]:
-#       pass
-
-#   @abc.abstractmethod
-#   def cdn_add(self, new_cdn: CDNFileServerRecord) -> bool:
-#       pass
-
-#   @abc.abstractmethod
-#   def cdn_remove(self, server_id: str) -> bool:
-#       pass
-
-#   @abc.abstractmethod
-#   def file_list(self,
-#                 server_id: str,
-#                 film_uuid: str = None) -> List[CDNFilmiFileRecord]:
-#       pass
-
-#   @abc.abstractmethod
-#   def file_add(self, new_file: CDNFilmiFileRecord) -> bool:
-#       pass
-
-#   @abc.abstractmethod
-#   def file_delete(self, server_id: str, film_uuid: str, quality: str) -> bool:
-#       pass
+    """ Abstract CDN File Manager """

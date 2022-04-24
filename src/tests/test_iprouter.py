@@ -4,7 +4,9 @@ import uuid
 
 import pytest
 
-from service.balancer.iprouter import IpRouter, CDN_BUSY_LIMIT
+from service.config import config
+
+from service.balancer.iprouter import IpRouter
 from service.balancer.models import CDNServerRecord, QUALITY, FilmRequest
 
 
@@ -54,7 +56,8 @@ def init_params():
 @pytest.mark.asyncio
 async def test_sever_not_busy(init_params):
     """
-    Выбран сервер с допустимой загруженностью CDN_BUSY_LIMIT (все остальные заняты)
+    Выбран сервер с допустимой загруженностью config.cdn_busy_limit
+    (все остальные заняты)
     """
     less_load_score = 0.1
     servers = init_params[0]
@@ -64,13 +67,14 @@ async def test_sever_not_busy(init_params):
     film_request = init_params[1]
     router = init_params[2]
     res = await router.select_cdn(cdn_servers=servers, cdn_request=film_request)
-    assert res.loading < CDN_BUSY_LIMIT
+    assert res.loading < config.cdn_busy_limit
 
 
 @pytest.mark.asyncio
 async def test_barely_live_server(init_params):
     """
-    Выбран сервер с минимальной загруженностью даже если он выше CDN_BUSY_LIMIT (все остальные заняты)
+    Выбран сервер с минимальной загруженностью даже если он выше
+    config.cdn_busy_limit(все остальные заняты)
     """
     load_score = 0.99
     servers = init_params[0]

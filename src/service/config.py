@@ -31,5 +31,7 @@ class BaseConfig(BaseSettings):
 
     cdn_counter_expiration: int = Field(default=60*60, env='CDN_COUNTER_EXPIRATION')
 
+    cdn_busy_limit: float = Field(default=0.95, env='CDN_BUSY_LIMIT')
+
 
 config = BaseConfig()

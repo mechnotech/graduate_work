@@ -42,7 +42,14 @@ class RedisCounter(AbstractCounter):
                           server_id: str,
                           film_uuid: Optional[str] = None,
                           quality: Optional[str] = None) -> int:
-
+        """ ключ в редисе вида server_id.film_uuid.quality
+            фукция put в идеале должна кинуть запрос и не дожидаясь ответа от
+            redis отдать управление
+            get_counter показывает запросы по серверу если остальное None +
+                            запросы по фильму независимо от качества +
+                            запросы по фильму с конкретным качеством +
+                            спросить про качество без фильма нельзя +
+        """
         async def scan_values(key):
             cnt = 0
             async for k in self.redis.scan_iter(match=key + '*'):
@@ -66,15 +73,3 @@ class RedisCounter(AbstractCounter):
         if result is None:
             return 0
         return int(result)
-
-    """
-    ключ в редисе вида server_id.film_uuid.quality
-
-    фукция put в идеале должна кинуть запрос и не дожидаясь ответа от redis
-    отдать управление
-
-    get_counter показывает запросы по серверу если остальное None +
-                            запросы по фильму независимо от качества +
-                            запросы по фильму с конкретным качеством +
-                            спросить про качество без фильма нельзя +
-    """
