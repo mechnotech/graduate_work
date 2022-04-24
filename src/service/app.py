@@ -9,13 +9,12 @@ from fastapi import (FastAPI,
 from fastapi.responses import JSONResponse
 
 from service.api.v1 import link
-
 from service.balancer.broker import MainBroker
 from service.balancer.iprouter import IpRouter
 from service.balancer.cdnmanager import MainCDNManager
-
 from service.config import config
 from service.balancer.cdnmanager.create_db import recreate
+
 
 class BrokerWrap():
 
