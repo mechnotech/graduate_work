@@ -1,4 +1,6 @@
 
+import glob
+import os
 
 from ipaddress import IPv4Address
 
@@ -53,6 +55,23 @@ def file_place():
     # 8f28972c-7644-4bbd-9e29-0d914912232a
     # a4d0691a-9fa4-4157-afa9-a87a2a990823
     # 22e7c14e-8c47-4155-aafc-a123d45fd357
+    for path in ['service/data/cdn_main/*',
+                 'service/data/cdn_1/*',
+                 'service/data/cdn_2/*']:
+        for file_name in glob.iglob(path):
+            os.remove(file_name)
+    with open('service/data/cdn_main/22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4',
+              'wt') as file_obj:
+        file_obj.write('22e7c14e-8c47-4155-aafc-a123d45fd357 360')
+
+    with open('service/data/cdn_main/22e7c14e-8c47-4155-aafc-a123d45fd357.720.mp4',
+              'wt') as file_obj:
+        file_obj.write('22e7c14e-8c47-4155-aafc-a123d45fd357 720')
+
+    with open('service/data/cdn_2/22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4',
+              'wt') as file_obj:
+        file_obj.write('22e7c14e-8c47-4155-aafc-a123d45fd357 360')
+
     return True
 
 
@@ -85,3 +104,21 @@ async def test_prepare(db_connect):
     result = await cdn_manager.prepare(cdn_request, server_select)
     assert result.cdn_server_url == 'localhost:8081'
     assert result.length_sec == 100
+
+
+@pytest.mark.asyncio
+async def test_file_move(db_connect, file_place):
+    cdn_manager = CDNManager(db_connect)
+    # print(list(glob.iglob('service/data/cdn_main/*')))
+
+    with pytest.raises(ValueError):
+        await cdn_manager.file_move('cdn_2',
+                                    'a2e7c14e-8c47-4155-aafc-a123d45fd357',
+                                    '720')
+
+
+
+
+
+
+#
