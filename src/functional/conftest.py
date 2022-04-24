@@ -52,11 +52,11 @@ def data_set():
     # 8f28972c-7644-4bbd-9e29-0d914912232a
     # a4d0691a-9fa4-4157-afa9-a87a2a990823
     # 22e7c14e-8c47-4155-aafc-a123d45fd357
-    for file_name in list(glob.iglob('data/cdn_main/*')):
-        os.remove(file_name)
-    with open('data/cdn_main/22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4',
-              'wt') as file_obj:
-        file_obj.write("22e7 360")
+    # for file_name in list(glob.iglob('data/cdn_main/*')):
+    #     os.remove(file_name)
+    # with open('data/cdn_main/22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4',
+    #           'wt') as file_obj:
+    #     file_obj.write("22e7 360")
 
     files = [{'name': '22e7c14e-8c47-4155-aafc-a123d45fd357.360.mp4',
               'file_uuid': '22e7c14e-8c47-4155-aafc-a123d45fd357',

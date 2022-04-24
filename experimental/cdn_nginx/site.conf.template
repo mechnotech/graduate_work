@@ -9,7 +9,8 @@ server {
         limit_req zone=one burst=12 delay=8;
         proxy_pass http://cdn_api:5000;
     }
-    location /cdn/master/ {
+
+    location /cdn/ {
     mp4;
     mp4_buffer_size     5m;
     mp4_max_buffer_size 30m;
@@ -31,7 +32,6 @@ server {
         return 410;
     }
 
-    alias /cdn/;
 
 }
 

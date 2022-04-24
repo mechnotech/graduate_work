@@ -50,7 +50,12 @@ class LinkService():
             length_sec = file_response.length_sec * config.cdn_var_expiration_mul
         expiration = int((datetime.datetime.now() + datetime.timedelta(seconds=length_sec)).timestamp())
 
-        lock = f'{expiration} /{file_response.path} {user_ip} {file_response.cdn_server_key}'.encode('utf-8')
+        fl = file_response.path.split('.')
+        fl[1] = film_request.quality
+        file_response.path = '.'.join(fl)
+        print('Файл - ', file_response.path)
+
+        lock = f'{expiration} /cdn/{file_response.path} {user_ip} {file_response.cdn_server_key}'.encode('utf-8')
         hash_md5 = hashlib.md5(lock).digest()
         base64_bytes = base64.urlsafe_b64encode(hash_md5)
         base64_message = base64_bytes.decode('utf-8')

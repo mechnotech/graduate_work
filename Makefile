@@ -11,7 +11,7 @@ UNITTEST_CONTAINER = cdn_unittest_container
 FUNC_DOCKERFILE = Dockerfile_func
 FUNC_IMAGE = cdn_func_image
 FUNC_CONTAINER = cdn_func_container
-FUNC_COMPOSE = docker-compose.func.yml
+FUNC_COMPOSE = docker-compose.func.yaml
 
 STAGE_COMPOSE = docker-compose.stage.yml
 
